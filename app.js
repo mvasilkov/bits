@@ -18,25 +18,29 @@ var trainer = new convnetjs.SGDTrainer(net, {
     l2_decay: 0
 })
 
-var size = 250
+var size = 125
 
 var in0 = document.getElementById('in0')
 in0.width = in0.height = size
 var cin0 = in0.getContext('2d')
 
+var in1 = document.getElementById('in1')
+in1.width = in1.height = size
+var cin1 = in1.getContext('2d')
+
 var out = document.getElementById('out')
 out.width = out.height = size
 var cout = out.getContext('2d')
 
-function init() {
-    cin0.fillStyle = '#fffbeb'
-    cin0.fillRect(0, 0, size, size)
+function init(c, font) {
+    c.fillStyle = '#fffbeb'
+    c.fillRect(0, 0, size, size)
 
-    cin0.font = '127px Nitti WM2'
-    cin0.textAlign = 'center'
-    cin0.textBaseline = 'middle'
-    cin0.fillStyle = '#20201f'
-    cin0.fillText('A', 0.5 * size, 0.5 * size)
+    c.font = font
+    c.textAlign = 'center'
+    c.textBaseline = 'middle'
+    c.fillStyle = '#20201f'
+    c.fillText('A', 0.5 * size, 0.5 * size)
 }
 
 function paint() {
@@ -62,8 +66,8 @@ function paint() {
     cout.putImageData(p, 0, 0)
 }
 
-function learn() {
-    var p = cin0.getImageData(0, 0, size, size)
+function learn(c) {
+    var p = c.getImageData(0, 0, size, size)
     var vol = new convnetjs.Vol(1, 1, 2)
     var loss = 0
 
@@ -88,10 +92,12 @@ function learn() {
     console.log('Loss:', loss / trainer.batch_size / 100)
 }
 
-init()
+init(cin0, '127px Nitti WM2')
+init(cin1, '100px Times')
 
 function loop() {
-    learn()
+    learn(cin0)
+    learn(cin1)
     setTimeout(loop, 1)
 }
 
